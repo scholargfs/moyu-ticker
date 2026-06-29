@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="echarts.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <!-- 顶栏:整条作为拖动区,控件悬停才显露 -->
+      <header id="bar" data-tauri-drag-region>
+        <span id="dot" title="实时"></span>
+        <span id="bar-label" data-tauri-drag-region></span>
+        <nav id="chrome">
+          <button id="btn-refresh" title="刷新">⟳</button>
+          <button id="btn-settings" title="设置">⚙</button>
+          <button id="btn-quit" class="quit" title="退出">✕</button>
+        </nav>
+      </header>
+
+      <!-- 列表视图 -->
+      <section id="view-list" class="view">
+        <ul id="rows"></ul>
+        <div id="list-empty" class="empty" hidden>自选股为空 · 点 ⚙ 添加</div>
+      </section>
+
+      <!-- 分时图视图 -->
+      <section id="view-chart" class="view" hidden>
+        <div class="sub-head">
+          <button id="btn-back" title="返回">‹</button>
+          <span id="chart-name"></span>
+          <span id="chart-price" class="mono"></span>
+        </div>
+        <div id="chart"></div>
+        <div id="chart-error" class="empty" hidden>分时数据暂不可用 · <a id="chart-retry">重试</a></div>
+      </section>
+
+      <!-- 设置视图 -->
+      <section id="view-settings" class="view" hidden>
+        <div class="sub-head">
+          <button id="btn-close-settings" title="返回">‹</button>
+          <span>自选股</span>
+        </div>
+        <p class="hint">一行一个代码,前缀 sh / sz,如 sh600519</p>
+        <textarea id="codes" spellcheck="false" autocomplete="off"></textarea>
+        <button id="btn-save" class="primary">保存</button>
+      </section>
+    </div>
+    <script src="main.js"></script>
+  </body>
+</html>

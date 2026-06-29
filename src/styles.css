@@ -1,0 +1,192 @@
+:root {
+  --bg: 14, 17, 22;        /* #0E1116 */
+  --surface: #161a21;
+  --line: #232a33;
+  --text: #c9d1d9;
+  --dim: #6e7681;
+  --up: #f0454b;           /* A股 红=涨 */
+  --down: #2ea043;         /* A股 绿=跌 */
+  --flat: #8b949e;
+  --accent: #d8a657;       /* 琥珀:均价/选中 */
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+  --sans: system-ui, -apple-system, "PingFang SC", sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
+
+#app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: rgba(var(--bg), 0.9);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 12px;
+  overflow: hidden;
+  transition: opacity 0.45s ease;
+}
+
+/* 鼠标移出 → 隐身式变暗 */
+body.dim #app { opacity: 0.16; }
+
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* ---- 顶栏 ---- */
+#bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 26px;
+  padding: 0 9px;
+  flex: none;
+  border-bottom: 1px solid var(--line);
+}
+#dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--dim);
+  flex: none;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+#dot.live { background: var(--down); box-shadow: 0 0 6px var(--down); }
+#dot.stale { background: var(--accent); }
+#bar-label {
+  flex: 1;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+  white-space: nowrap;
+  overflow: hidden;
+}
+#chrome { display: flex; gap: 2px; opacity: 0; transition: opacity 0.2s; }
+#app:hover #chrome { opacity: 1; }
+#chrome button,
+.sub-head button {
+  background: none;
+  border: none;
+  color: var(--dim);
+  font-size: 13px;
+  width: 20px; height: 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#chrome button:hover,
+.sub-head button:hover { color: var(--text); background: var(--line); }
+
+/* 红叉:退出整个应用 */
+#chrome button.quit { color: var(--up); font-size: 11px; }
+#chrome button.quit:hover { color: #fff; background: var(--up); }
+
+/* ---- 视图容器 ---- */
+.view { flex: 1; overflow-y: auto; }
+.view[hidden] { display: none; }
+.view::-webkit-scrollbar { width: 0; }
+
+/* ---- 列表 ---- */
+#rows { list-style: none; }
+.row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: baseline;
+  gap: 8px;
+  padding: 5px 9px;
+  border-bottom: 1px solid rgba(35, 42, 51, 0.5);
+  cursor: pointer;
+}
+.row:hover { background: rgba(255, 255, 255, 0.03); }
+.row .name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
+}
+.row .code {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--dim);
+  letter-spacing: 0.02em;
+}
+.row .price {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  text-align: right;
+}
+.row .pct {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  text-align: right;
+  min-width: 56px;
+}
+.up { color: var(--up); }
+.down { color: var(--down); }
+.flat { color: var(--flat); }
+
+/* ---- 子页头 ---- */
+.sub-head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 9px;
+  border-bottom: 1px solid var(--line);
+  font-size: 12px;
+}
+.sub-head #chart-price { margin-left: auto; }
+
+/* ---- 分时图 ---- */
+#chart { width: 100%; height: 180px; }
+
+/* ---- 空态/提示 ---- */
+.empty {
+  padding: 24px 14px;
+  text-align: center;
+  color: var(--dim);
+  font-size: 11px;
+}
+.empty a { color: var(--accent); cursor: pointer; }
+.hint { padding: 8px 10px 4px; color: var(--dim); font-size: 10px; }
+
+/* ---- 设置 ---- */
+#codes {
+  width: calc(100% - 18px);
+  margin: 0 9px;
+  height: 150px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 7px;
+  resize: none;
+  outline: none;
+}
+#codes:focus { border-color: var(--accent); }
+button.primary {
+  margin: 9px;
+  padding: 6px 14px;
+  background: var(--accent);
+  color: #1a1206;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+}
+button.primary:active { transform: translateY(1px); }
+
+a:focus-visible,
+button:focus-visible { outline: 1px solid var(--accent); outline-offset: 1px; }
